@@ -31,6 +31,13 @@ class Gui:
 
         top.config(menu=menubar)
 
+        button=tkinter.Button(width=5)
+        button.pack()
+
+
+
+
+
         # 进入消息循环
         top.mainloop()
 
@@ -129,21 +136,21 @@ class Pre:
         import re
         import pandas as pd
         import numpy
-        fn = open("C:/Users/***/Desktop/Python数据分析与数据化运营/chapter1/data.txt")
+        fn = open("1.txt")
         all_data = fn.readlines()
         fn.close()
 
         x = []
         y = []
-        for single_data in all_data:
-            temp_data = re.split('\t|\n', single_data)
-            x.append(float(temp_data[0]))
-            y.append(float(temp_data[1]))
-        x = numpy.array(x).reshape([100, 1])
-        y = numpy.array(y).reshape([100, 1])
+        # for single_data in all_data:
+        #     temp_data = re.split('\t|\n', single_data)
+        #     x.append(float(temp_data[0]))
+        #     y.append(float(temp_data[1]))
+        x = numpy.array([1,2,3,4,5,6,7,8,9,10,11,12]).reshape([12, 1])
+        y = numpy.array([100,200,200,100,400,300,500,100,300,800,600,200]).reshape([12, 1])
 
         plt.scatter(x, y)
-        plt.show()
+        # plt.show()
 
         from sklearn.linear_model import LinearRegression
         model=LinearRegression()
@@ -152,18 +159,115 @@ class Pre:
         model_coef = model.coef_  # 获取模型自变量系数并赋值给model_coef
         model_intercept = model.intercept_  # 获取模型的截距并赋值给model_intercept
         r2 = model.score(x, y)  # 回归方程 y = model_coef*x + model_intercept
-        new_x = 84610
+        new_x = 11
         pre_y = model.predict(new_x)
-        print(pre_y)
+        return pre_y
+
 
 
 
 
 
 if __name__ == '__main__':
-    sql='select * from sale_money;'
-    a=Gui()
-    a.init()
+    # sql='select * from sale_money;'
+    # a=Gui()
+    # a.init()
+
+    from kehu import Visualization
+
+    a = Visualization()
+    sql = "select * from client;"
+    # a.bar(sql)
+    #a.con.close()
+
+
+
+    def sss(Receive_Window):
+        from tkinter import END
+        pre = Pre()
+        y=pre.pre()
+        month=10
+        strs=str(month)+'月的销售额预计为'+str(y[0][0])+'元'
+        print(strs)
+        Receive_Window.insert(END,strs)
+
+    def bb():
+        a=Visualization()
+        a.all_sale()
+
+
+
+
+    import threading
+    import tkinter as tk
+    #import serial.tools.list_ports
+    from tkinter import ttk
+    from tkinter import scrolledtext
+
+    #SerialPort = serial.Serial()
+    GUI = tk.Tk()  # 父容器
+    GUI.title("数据可视化")  # 父容器标题
+    GUI.geometry("440x320")  # 父容器大小
+
+    # Information = tk.LabelFrame(GUI, text="操作信息", padx=10, pady=10)  # 水平，垂直方向上的边距均为10
+    # Information.place(x=20, y=20)
+    # Information_Window = scrolledtext.ScrolledText(Information, width=20, height=5, padx=10, pady=10, wrap=tk.WORD)
+    # Information_Window.grid()
+
+    Send2 = tk.LabelFrame(GUI, text="预测销售额，输入月份", padx=10, pady=10)  # 水平，垂直方向上的边距均为 10
+    Send2.place(x=20, y=20)
+
+    DataSend2 = tk.StringVar()  # 定义DataSend为保存文本框内容的字符串
+
+    EntrySend2 = tk.StringVar()
+    Send_Window2 = ttk.Entry(Send2, textvariable=EntrySend2, width=23)
+    Send_Window2.grid()
+
+    tk.Button(Send2, text="查询", command=lambda :sss(Receive_Window)).grid(pady=5, sticky=tk.E)
+
+    Send = tk.LabelFrame(GUI, text="查询销售额，输入年份", padx=10, pady=5)  # 水平，垂直方向上的边距均为 10
+    Send.place(x=240, y=20)
+
+    DataSend = tk.StringVar()  # 定义DataSend为保存文本框内容的字符串
+
+    EntrySend = tk.StringVar()
+    Send_Window = ttk.Entry(Send, textvariable=EntrySend, width=23)
+    Send_Window.grid()
+
+    tk.Button(Send, text="查询",).grid(pady=5, sticky=tk.E)
+
+    Receive = tk.LabelFrame(GUI, text="接收区", padx=10, pady=10)  # 水平，垂直方向上的边距均为 10
+    Receive.place(x=240, y=124)
+    Receive_Window = scrolledtext.ScrolledText(Receive, width=18, height=9, padx=8, pady=10, wrap=tk.WORD)
+    Receive_Window.grid()
+
+    option = tk.LabelFrame(GUI, text="选项", padx=10, pady=10)  # 水平，垂直方向上的边距均为10
+    option.place(x=20, y=150, width=203)  # 定位坐标
+    # ************创建下拉列表**************
+    # ttk.Label(option, text="串口号:").grid(column=0, row=0)  # 添加串口号标签
+    # ttk.Label(option, text="波特率:").grid(column=0, row=1)  # 添加波特率标签
+
+    # Port = tk.StringVar()  # 端口号字符串
+    # Port_list = ttk.Combobox(option, width=12, textvariable=Port, state='readonly')
+    # #ListPorts = list(serial.tools.list_ports.comports())
+    # #Port_list['values'] = [i[0] for i in ListPorts]
+    # Port_list.current(0)
+    # Port_list.grid(column=1, row=0)  # 设置其在界面中出现的位置  column代表列   row 代表行
+    #
+    # BaudRate = tk.StringVar()  # 波特率字符串
+    # BaudRate_list = ttk.Combobox(option, width=12, textvariable=BaudRate, state='readonly')
+    # BaudRate_list['values'] = (1200, 2400, 4800, 9600, 14400, 19200, 38400, 43000, 57600, 76800, 115200)
+    # BaudRate_list.current(3)
+    # BaudRate_list.grid(column=1, row=1)  # 设置其在界面中出现的位置  column代表列   row 代表行
+
+    switch = tk.LabelFrame(GUI, text="", padx=10, pady=10)  # 水平，垂直方向上的边距均为 10
+    switch.place(x=20, y=250, width=203)  # 定位坐标
+
+
+    tk.Button(switch, text="客户信息",command=lambda :a.bar(sql)).pack(side="left", padx=13)
+    tk.Button(switch, text="客户分类",).pack(side="right", padx=13)
+
+    GUI.mainloop()
 
 
 
